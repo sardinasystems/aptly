@@ -11,7 +11,7 @@ import (
 
 	"github.com/aptly-dev/aptly/database"
 	"github.com/aptly-dev/aptly/utils"
-	"github.com/pborman/uuid"
+	"github.com/google/uuid"
 	"github.com/ugorji/go/codec"
 )
 
@@ -45,12 +45,12 @@ type Snapshot struct {
 
 // NewSnapshotFromRepository creates snapshot from current state of repository
 func NewSnapshotFromRepository(name string, repo *RemoteRepo) (*Snapshot, error) {
-	if repo.packageRefs == nil || repo.packageRefs.Len() == 0 {
+	if repo.packageRefs == nil {
 		return nil, errors.New("mirror not updated")
 	}
 
 	return &Snapshot{
-		UUID:                 uuid.New(),
+		UUID:                 uuid.NewString(),
 		Name:                 name,
 		CreatedAt:            time.Now(),
 		SourceKind:           SourceRemoteRepo,
@@ -66,7 +66,7 @@ func NewSnapshotFromRepository(name string, repo *RemoteRepo) (*Snapshot, error)
 // NewSnapshotFromLocalRepo creates snapshot from current state of local repository
 func NewSnapshotFromLocalRepo(name string, repo *LocalRepo) (*Snapshot, error) {
 	snap := &Snapshot{
-		UUID:        uuid.New(),
+		UUID:        uuid.NewString(),
 		Name:        name,
 		CreatedAt:   time.Now(),
 		SourceKind:  SourceLocalRepo,
@@ -95,7 +95,7 @@ func NewSnapshotFromRefList(name string, sources []*Snapshot, list *PackageRefLi
 	}
 
 	return &Snapshot{
-		UUID:        uuid.New(),
+		UUID:        uuid.NewString(),
 		Name:        name,
 		CreatedAt:   time.Now(),
 		SourceKind:  "snapshot",
